@@ -1,0 +1,4 @@
+Faker~=37.5.3
+requests~=2.32.4
+allure-python-commons~=2.15.0
+pytest~=8.4.1
