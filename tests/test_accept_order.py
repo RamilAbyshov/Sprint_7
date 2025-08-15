@@ -2,6 +2,7 @@ import requests
 import allure
 from data import urls
 from data.generator import generate_order_data
+from data.test_data import ACCEPT_ORDER_NO_COURIER_ID, ACCEPT_ORDER_INVALID_COURIER_ID, ACCEPT_ORDER_INVALID_ORDER_ID
 from utils.courier_helpers import register_new_courier_and_return_login_password, login_and_get_id
 
 @allure.epic("Orders API")
@@ -43,7 +44,7 @@ class TestAcceptOrder:
 
         with allure.step("Verify error response"):
             assert resp.status_code == 400
-            assert resp.json()["message"] == "Недостаточно данных для поиска"
+            assert resp.json()["message"] == ACCEPT_ORDER_NO_COURIER_ID
 
     @allure.title("Order acceptance with invalid courierId — error")
     def test_accept_order_invalid_courier_id(self):
@@ -59,7 +60,7 @@ class TestAcceptOrder:
 
         with allure.step("Verify error response"):
             assert resp.status_code == 404
-            assert resp.json()["message"] == "Курьера с таким id не существует"
+            assert resp.json()["message"] == ACCEPT_ORDER_INVALID_COURIER_ID
 
     @allure.title("Order acceptance with invalid orderId — error")
     def test_accept_order_invalid_order_id(self):
@@ -72,4 +73,4 @@ class TestAcceptOrder:
 
         with allure.step("Verify error response"):
             assert resp.status_code == 404
-            assert resp.json()["message"] == "Заказа с таким id не существует"
+            assert resp.json()["message"] == ACCEPT_ORDER_INVALID_ORDER_ID

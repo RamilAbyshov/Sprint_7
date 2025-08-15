@@ -1,5 +1,7 @@
 import requests
 import allure
+
+from data.test_data import DELETE_COURIER_NO_ID, DELETE_COURIER_NONEXISTENT
 from utils.courier_helpers import register_new_courier_and_return_login_password, login_and_get_id
 from data import urls
 
@@ -23,7 +25,7 @@ class TestDeleteCourier:
             resp = requests.delete(urls.DELETE_COURIER)
         with allure.step("Check status code and error message"):
             assert resp.status_code == 400
-            assert resp.json()["message"] == "Недостаточно данных для удаления курьера"
+            assert resp.json()["message"] == DELETE_COURIER_NO_ID
 
     @allure.title("Удаление курьера с несуществующим ID — ошибка")
     def test_delete_courier_nonexistent(self):
@@ -31,4 +33,4 @@ class TestDeleteCourier:
             resp = requests.delete(f"{urls.DELETE_COURIER}/99999999")
         with allure.step("Check error response"):
             assert resp.status_code == 404
-            assert resp.json()["message"] == "Курьера с таким id нет"
+            assert resp.json()["message"] == DELETE_COURIER_NONEXISTENT

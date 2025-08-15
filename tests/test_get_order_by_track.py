@@ -2,6 +2,8 @@ import requests
 import allure
 from data import urls
 from data.generator import generate_order_data
+from data.test_data import GET_ORDER_NO_TRACK, GET_ORDER_INVALID_TRACK
+
 
 @allure.epic("Orders API")
 @allure.feature("Get order by track")
@@ -26,7 +28,7 @@ class TestGetOrderByTrack:
             resp = requests.get(urls.GET_ORDER_BY_TRACK)
         with allure.step("Check status code and error message"):
             assert resp.status_code == 400
-            assert resp.json()["message"] == "Недостаточно данных для поиска"
+            assert resp.json()["message"] == GET_ORDER_NO_TRACK
 
     @allure.title("Get order with invalid track — error")
     def test_get_order_invalid_track(self):
@@ -34,4 +36,4 @@ class TestGetOrderByTrack:
             resp = requests.get(urls.GET_ORDER_BY_TRACK, params={"t": 99999999})
         with allure.step("Check status code and error message"):
             assert resp.status_code == 404
-            assert resp.json()["message"] == "Заказ не найден"
+            assert resp.json()["message"] == GET_ORDER_INVALID_TRACK

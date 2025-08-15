@@ -3,6 +3,7 @@ import requests
 import allure
 from data import urls
 from data.generator import generate_courier
+from data.test_data import CREATE_COURIER_DUPLICATE, CREATE_COURIER_MISSING_FIELD
 from utils.courier_helpers import register_new_courier_and_return_login_password, login_and_get_id, delete_courier_by_id
 
 @allure.epic("Courier API")
@@ -31,7 +32,7 @@ class TestCreateCourier:
             resp = requests.post(urls.CREATE_COURIER, json={"login": login, "password": password, "firstName": firstName})
         with allure.step("Check status code and message"):
             assert resp.status_code == 409
-            assert resp.json()["message"] == "Этот логин уже используется. Попробуйте другой."
+            assert resp.json()["message"] == CREATE_COURIER_DUPLICATE
 
     @allure.title("Missing required fields prevents courier creation")
     @pytest.mark.parametrize("missing_field", ["login", "password"])
@@ -43,4 +44,4 @@ class TestCreateCourier:
             resp = requests.post(urls.CREATE_COURIER, json=courier)
         with allure.step("Check status code and error message"):
             assert resp.status_code == 400
-            assert resp.json()["message"] == "Недостаточно данных для создания учетной записи"
+            assert resp.json()["message"] == CREATE_COURIER_MISSING_FIELD

@@ -2,6 +2,7 @@ import pytest
 import requests
 import allure
 from data import urls
+from data.test_data import LOGIN_INVALID_CREDENTIALS, LOGIN_MISSING_FIELD
 from utils.courier_helpers import register_new_courier_and_return_login_password, delete_courier_by_id
 
 @allure.epic("Courier API")
@@ -39,7 +40,7 @@ class TestLoginCourier:
             resp = requests.post(urls.LOGIN_COURIER, json={"login": login_to_use, "password": password_to_use})
         with allure.step("Check status code and error message"):
             assert resp.status_code == 404
-            assert resp.json()["message"] == "Учетная запись не найдена"
+            assert resp.json()["message"] == LOGIN_INVALID_CREDENTIALS
 
     @allure.title("Missing required fields — error")
     @pytest.mark.parametrize("missing_field", ["login", "password"])
@@ -53,4 +54,4 @@ class TestLoginCourier:
 
         with allure.step("Check status code and error message"):
             assert resp.status_code == 400
-            assert resp.json()["message"] == "Недостаточно данных для входа"
+            assert resp.json()["message"] == LOGIN_MISSING_FIELD

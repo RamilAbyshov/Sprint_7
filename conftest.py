@@ -4,7 +4,6 @@ from utils.courier_helpers import register_new_courier_and_return_login_password
 @pytest.fixture
 def new_courier():
     creds = register_new_courier_and_return_login_password()
-    assert creds is not None, "Не удалось создать тестового курьера"
     login, password, firstName = creds
     courier_id = login_and_get_id(login, password)
     yield {"login": login, "password": password, "firstName": firstName, "id": courier_id}
